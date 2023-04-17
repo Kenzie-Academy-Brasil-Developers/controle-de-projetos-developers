@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import { QueryResult } from "pg";
 import format from "pg-format";
 import { client } from "../../database";
+import {
+  IProject,
+  TProjectRequest,
+} from "../../interfaces/interfaces.projects";
 
 const createProject = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const dataProject = req.body;
+  const dataProject: Partial<TProjectRequest> = req.body;
 
   const queryString: string = format(
     `
@@ -21,7 +25,7 @@ const createProject = async (
     Object.values(dataProject)
   );
 
-  const queryResult: QueryResult = await client.query(queryString);
+  const queryResult: QueryResult<IProject> = await client.query(queryString);
 
   return res.status(201).json(queryResult.rows[0]);
 };

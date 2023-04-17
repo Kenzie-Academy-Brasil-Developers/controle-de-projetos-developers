@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import format from "pg-format";
 import { client } from "../../database";
+import {
+  IDevelopers,
+  TDevelopersRequest,
+} from "../../interfaces/interfaces.developers";
+import { QueryResult } from "pg";
 
 const createDev = async (req: Request, res: Response): Promise<Response> => {
-  const data = req.body;
+  const data: TDevelopersRequest = req.body;
 
   const queryString: string = format(
     `
@@ -17,7 +22,7 @@ const createDev = async (req: Request, res: Response): Promise<Response> => {
     Object.values(data)
   );
 
-  const queryResult: any = await client.query(queryString);
+  const queryResult: QueryResult<IDevelopers> = await client.query(queryString);
 
   return res.status(201).json(queryResult.rows[0]);
 };

@@ -19,10 +19,12 @@ import {
   verifyInfoDevExists,
   verifyOS,
 } from "./middleware/developers.middlewares";
+import { listDevAndProjects } from "./logics/developers/listDevAndProjects.logic";
 
 const app: Application = express();
 app.use(express.json());
 
+app.get("/developers/:id", ensureIdDevExists, listDevAndProjects);
 app.post("/developers", ensureEmailExists, createDev);
 app.patch("/developers/:id", ensureIdDevExists, updateDev);
 app.delete("/developers/:id", ensureIdDevExists, deleteDev);

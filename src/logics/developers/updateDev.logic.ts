@@ -2,11 +2,12 @@ import { Request, Response, query } from "express";
 import format from "pg-format";
 import { QueryConfig, QueryResult } from "pg";
 import { client } from "../../database";
+import { IDevelopers } from "../../interfaces/interfaces.developers";
 
 const updateDev = async (req: Request, res: Response): Promise<Response> => {
-  const dataDev = req.body;
+  const dataDev: IDevelopers = req.body;
 
-  const id = parseInt(req.params.id);
+  const id: number = parseInt(req.params.id);
 
   const queryString: string = format(
     `
@@ -26,7 +27,7 @@ const updateDev = async (req: Request, res: Response): Promise<Response> => {
     values: [id],
   };
 
-  const queryResult: QueryResult<any> = await client.query(queryConfig);
+  const queryResult: QueryResult<IDevelopers> = await client.query(queryConfig);
   return res.status(200).json(queryResult.rows[0]);
 };
 

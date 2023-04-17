@@ -2,14 +2,15 @@ import { Request, Response } from "express";
 import { QueryConfig, QueryResult } from "pg";
 import format from "pg-format";
 import { client } from "../../database";
+import { IProject } from "../../interfaces/interfaces.projects";
 
 const updateProject = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const id = parseInt(req.params.id);
+  const id: number = parseInt(req.params.id);
 
-  const dataProject = req.body;
+  const dataProject: Partial<IProject> = req.body;
 
   const queryString: string = format(
     `
@@ -29,7 +30,7 @@ const updateProject = async (
     values: [id],
   };
 
-  const queryResult: QueryResult = await client.query(queryConfig);
+  const queryResult: QueryResult<IProject> = await client.query(queryConfig);
 
   return res.status(200).json(queryResult.rows[0]);
 };

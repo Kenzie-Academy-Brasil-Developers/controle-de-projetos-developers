@@ -2,14 +2,15 @@ import { Request, Response } from "express";
 import { QueryConfig, QueryResult } from "pg";
 import { client } from "../../database";
 import format from "pg-format";
+import { TProjectTechnologiesRequest } from "../../interfaces/interfaces.projects";
 
 const addTechInProject = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const projectId = parseInt(req.params.id);
-  const addedIn = new Date();
-  const technologyName = req.body.name;
+  const projectId: number = parseInt(req.params.id);
+  const addedIn: Date = new Date();
+  const technologyName: string = req.body.name;
 
   let queryString: string = `
         SELECT 
@@ -27,11 +28,11 @@ const addTechInProject = async (
 
   let queryResult: QueryResult = await client.query(queryConfig);
 
-  const technology = queryResult.rows[0];
+  const technology: any = queryResult.rows[0];
 
-  const technologyId = technology.id;
+  const technologyId: number = technology.id;
 
-  const dataProjectAndTech = {
+  const dataProjectAndTech: TProjectTechnologiesRequest = {
     addedIn: addedIn,
     projectId: projectId,
     technologyId: technologyId,

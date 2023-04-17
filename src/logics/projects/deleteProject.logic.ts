@@ -6,7 +6,7 @@ const deleteProject = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const id = parseInt(req.params.id);
+  const id: number = parseInt(req.params.id);
 
   const queryString: string = `
         DELETE FROM

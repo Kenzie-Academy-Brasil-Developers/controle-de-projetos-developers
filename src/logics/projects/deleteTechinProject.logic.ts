@@ -6,8 +6,8 @@ const deleteTechinProject = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const projectId = parseInt(req.params.id);
-  const technologyName = req.params.name;
+  const projectId: number = parseInt(req.params.id);
+  const technologyName: string = req.params.name;
   let queryString: string = `
     SELECT 
             *
@@ -24,9 +24,9 @@ const deleteTechinProject = async (
 
   let queryResult: QueryResult = await client.query(queryConfig);
 
-  const technology = queryResult.rows[0];
+  const technology: any = queryResult.rows[0];
 
-  const technologyId = technology.id;
+  const technologyId: number = technology.id;
 
   queryString = `
     DELETE FROM
