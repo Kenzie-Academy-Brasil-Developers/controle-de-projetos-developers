@@ -13,18 +13,30 @@ import { updateProject } from "./logics/projects/updateProject.logic";
 import { deleteProject } from "./logics/projects/deleteProject.logic";
 import { addTechInProject } from "./logics/projects/addTechInProject.logic";
 import { deleteTechinProject } from "./logics/projects/deleteTechinProject.logic";
+import {
+  ensureEmailExists,
+  ensureIdDevExists,
+  verifyInfoDevExists,
+  verifyOS,
+} from "./middleware/developers.middlewares";
 
 const app: Application = express();
 app.use(express.json());
 
-app.post("/developers", createDev);
-app.patch("/developers/:id", updateDev);
-app.delete("/developers/:id", deleteDev);
-app.post("/developers/:id/infos", createInfoDev);
+app.post("/developers", ensureEmailExists, createDev);
+app.patch("/developers/:id", ensureIdDevExists, updateDev);
+app.delete("/developers/:id", ensureIdDevExists, deleteDev);
+app.post(
+  "/developers/:id/infos",
+  ensureIdDevExists,
+  verifyInfoDevExists,
+  verifyOS,
+  createInfoDev
+);
 
-app.post("/projects", createProject);
+app.post("/projects", ensureIdDevExists, createProject);
 app.get("/projects/:id", listProjectById);
-app.patch("/projects/:id", updateProject);
+app.patch("/projects/:id", ensureIdDevExists, updateProject);
 app.delete("/projects/:id", deleteProject);
 app.post("/projects/:id/technologies", addTechInProject);
 app.delete("/projects/:id/technologies/:name", deleteTechinProject);
