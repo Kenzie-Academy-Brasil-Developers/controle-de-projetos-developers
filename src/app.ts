@@ -20,6 +20,10 @@ import {
   verifyOS,
 } from "./middleware/developers.middlewares";
 import { listDevAndProjects } from "./logics/developers/listDevAndProjects.logic";
+import {
+  ensureDeveloperInProject,
+  verifyProjectExists,
+} from "./middleware/projects.middlewares";
 
 const app: Application = express();
 app.use(express.json());
@@ -36,11 +40,26 @@ app.post(
   createInfoDev
 );
 
-app.post("/projects", ensureIdDevExists, createProject);
-app.get("/projects/:id", listProjectById);
-app.patch("/projects/:id", ensureIdDevExists, updateProject);
-app.delete("/projects/:id", deleteProject);
-app.post("/projects/:id/technologies", addTechInProject);
-app.delete("/projects/:id/technologies/:name", deleteTechinProject);
+app.post(
+  "/projects",
+  ensureIdDevExists,
+  ensureDeveloperInProject,
+  createProject
+);
+app.get("/projects/:id", verifyProjectExists, listProjectById);
+app.patch(
+  "/projects/:id",
+  ensureIdDevExists,
+  verifyProjectExists,
+  ensureDeveloperInProject,
+  updateProject
+);
+app.delete("/projects/:id", verifyProjectExists, deleteProject);
+app.post("/projects/:id/technologies", verifyProjectExists, addTechInProject);
+app.delete(
+  "/projects/:id/technologies/:name",
+  verifyProjectExists,
+  deleteTechinProject
+);
 
 export default app;

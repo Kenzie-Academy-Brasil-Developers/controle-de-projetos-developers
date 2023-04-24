@@ -37,7 +37,7 @@ const listProjectById = async (
 
   const queryResult: QueryResult = await client.query(queryConfig);
 
-  return res.status(200).json(queryResult.rows);
+  return res.status(200).json(queryResult.rows[0]);
 };
 
 export { listProjectById };
